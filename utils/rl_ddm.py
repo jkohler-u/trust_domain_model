@@ -78,7 +78,10 @@ def sim_rlddm_integrated(m_sim, ground_truth_df, alpha, expertise_map):
             "choice": choice,
             "rt": rt,
             "reward": reward,
-            "expertise": exp_val
+            "expertise": exp_val,
+            "domain": dom,
+            "q_overall": q_values[spk]['overall'],
+            "q_dom": q_values[spk][dom]
         })
         results.append(combined_row)
         
