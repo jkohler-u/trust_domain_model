@@ -2,9 +2,6 @@ import numpy as np
 import pandas as pd
 import pyddm
 
-
-
-
 def sim_rlddm(m_sim, n_trials, n_sessions, reward_probabilities, alpha):
     qvals = np.array([0.5, 0.5])
     choice = []

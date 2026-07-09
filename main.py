@@ -16,30 +16,44 @@ from utils.rl_ddm import sim_rlddm, m_sim
 # overall: 
 # Qoverall[trial] = Qoverall[[trial-1] + learning_rate * (true_reward - Qoverall[trial-1])
 
-# After each trial (per domain)l:
-#   If person acts trustworthy/untrustworthy:
-#     Qdomain ← Qdomain + α × (R - Qdomain) 
-#     Qoverall ← Qoverall + α × (R - Qoverall)
-
-# Where (per domain):
-# α = learning rate (0 to 1)
-# R = reward you received (1 for correct, -1 for incorrect) → whether the participant's response aligned with their choice
 
 # drift_rate = drift_rate_intercept + drift_rate_scaling x …. (function of q-values)
 # drift_rate = omega(perceived_domain_expertise_speaker *  softmax(Qdomain)) + (1-omega) softmax(Qoverall )
-# => how would we solve that the Q values are on different scales 
+# -->
+# drift_rate = drift_rate_intercept + drift_rate_scaling * (omega(perceived_domain_expertise_speaker * softmax(Q_domain) + (1-omega) * softmax(Q_overall)))???
+# TODO: do some simulations, see whether Q values are on different scales 
 
-# Each trial/ DDM:
-# z/bias: perceived_domain_expertise_speaker of the speaker
-# a/caution: general trustingness of the participant
-# drift rate: predicted by the RL → Q
-#  t0: non-decision-time - fixed across participants (?)
-# => output: decision of the participant / RT of the participant 
+    
+# TODO: map our thoughts to the code in lossRL.py and rl_ddm.py, then to example code in rl_ddm_example.py
 
 
 PLOT_DIR = Path(__file__).parent.parent / "plots"
 
 if __name__ == "__main__":
+    # TODO: map our thoughts to parameter values
+    # --- RL parameters ---
+    # update Q-values after each trial (per domain and overall)
+    #     Qdomain ← Qdomain + α × (R - Qdomain) 
+    #     Qoverall ← Qoverall + α × (R - Qoverall)
+    # given:
+        # alpha (value per participant): learning rate of the participant (0 to 1)
+        # reward (value per trial): whether the participant's response aligned with their choice (1 if correct, -1 if incorrect)
+    # to be fitted:
+        # drift rate scaling (value per participant): how much the Q-values influence the drift rate
+    # output:
+        # Q-values for each domain and overall
+    # --- DDM parameters ---
+    # given: 
+        # z/bias (value per domain per speaker): perceived_domain_expertise_speaker of the speaker
+        # a/caution (value per participant): inverse confidence of the participant
+        # t0: non-decision-time (fixed value per or across participants)
+    # to be fitted:
+        # drift rate (predicted by the RL -> Q)
+    # output:
+        # decision of the participant
+        # RT of participant
+
+
     # Create model object with fixed parameters to simulate data
 
     # Create solution object (to later simulate data; represents probability distribution function over time for choices associated with upper and lower bound crossings)
