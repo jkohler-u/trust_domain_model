@@ -60,12 +60,12 @@ if __name__ == "__main__":
     model_sim = pyddm.gddm(
         drift=trust_drift,
         noise=1, # amount of random "jitter" / inconsistency of participant
-        bound=1, # distance between yes/no boundaries
-        nondecision=0,
+        bound=1, # confidence: distance between yes/no boundaries
+        nondecision=0.3,
         conditions=["q_domain", "q_overall", "expertise"], # need expertise in trust_drift, do not want column to be dropped
         parameters={
             "drift_intercept": 0, # general tendency to trust or distrust.
-            "drift_scaling": 1, # confidence: how much do trust values influence behaviour
+            "drift_scaling": 1, # how much do trust values influence behaviour
             "omega": 0.5, # weighting: omega determines tendency to trust domain-expertise over general trust
             "alpha": 0.1 # learning rate, value the Optimizer will try to find
         },
@@ -93,7 +93,7 @@ if __name__ == "__main__":
         drift=trust_drift,
         noise=1,
         bound=1,
-        nondecision=0,
+        nondecision=0.3,
         conditions=["q_domain", "q_overall", "expertise"],
         parameters=recov_params,
         T_dur=20
