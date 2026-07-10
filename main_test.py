@@ -35,7 +35,7 @@ if __name__ == "__main__":
     # --- CONFIGURATION ---
     speakers = ['Speaker1', 'Speaker2']
     domains = ['A', 'B']
-    speaker_confidence = 0.4
+    speaker_confidence = 1
     # ADDED: How often the speaker is actually right (Ground Truth)
     truth_probs = {
         'Speaker1': {'A': 0.8, 'B': 0.2}, 
@@ -66,7 +66,7 @@ if __name__ == "__main__":
         nondecision=0.3,
         conditions=["q_domain", "q_overall", "expertise"], # need expertise in trust_drift, do not want column to be dropped
         parameters={
-            "drift_intercept": speaker_confidence, # general tendency to trust or distrust.
+            "drift_intercept": 0, # general tendency to trust or distrust.
             "drift_scaling": 1, # confidence: how much do trust values influence behaviour
             "omega": 0.5, # weighting: omega determines tendency to trust domain-expertise over general trust
             "alpha": 0.1 # learning rate, value the Optimizer will try to find
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     model_recov = pyddm.gddm(
         drift=trust_drift,
         noise=1,
-        bound=1,
+        bound=speaker_confidence,
         nondecision=0,
         conditions=["q_domain", "q_overall", "expertise"],
         parameters=recov_params,

@@ -65,7 +65,8 @@ def sim_rlddm_integrated(m_sim, ground_truth_df, alpha, expertise_map):
         rt = res['RT'].iloc[0]
         
         # 2. ADDED: REWARD for alignment --> (Choice=Trust AND True) OR (Choice=Distrust AND False)
-        reward = 1 if choice == is_true else 0
+        #reward = 1 if choice == is_true else 0
+        reward = 1 if is_true else 0
         
         # 3. RL Update
         q_values[spk]['overall'] = (1 - alpha) * q_values[spk]['overall'] + alpha * reward
