@@ -63,7 +63,8 @@ def sim_rlddm_integrated(m_sim, ground_truth_df, alpha, expertise_map):
         
         choice = res['choice'].iloc[0] # 1 = Trust, 0 = Distrust
         rt = res['RT'].iloc[0]
-        
+        print(f"DDM made choice: {choice}")
+        # print(f"DDM params {sol.params}")
         # 2. ADDED: REWARD for alignment --> (Choice=Trust AND True) OR (Choice=Distrust AND False)
         #reward = 1 if choice == is_true else 0
         reward = 1 if is_true else 0

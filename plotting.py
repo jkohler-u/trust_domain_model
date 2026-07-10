@@ -222,8 +222,8 @@ def plot_qvalues(qvalue_overall, qvalue_option1, qvalue_option2, show_legend=Fal
     n_opt1 = len(qvalue_option1)
     n_opt2 = len(qvalue_option2)
     
-    ax2.plot(np.arange(1, n_opt1 + 1), qvalue_option1, color='blue', lw=2, label=option_names[1] if option_names else "Opt 1")
-    ax2.plot(np.arange(1, n_opt2 + 1), qvalue_option2, color='red', lw=2, label=option_names[2] if option_names else "Opt 2")
+    ax2.plot(np.arange(1, n_opt1 + 1), qvalue_option1, color='blue', lw=2, label=option_names[1] if option_names else "Domain A")
+    ax2.plot(np.arange(1, n_opt2 + 1), qvalue_option2, color='red', lw=2, label=option_names[2] if option_names else "Domain B")
     
     ax2.set_title("Option-Specific Learned Values")
     ax2.set_xlabel("Trial")

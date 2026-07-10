@@ -21,8 +21,8 @@ class LossRLIntegrated(pyddm.LossFunction):
             # TODO: Do we want to reset Q-values at start of session 
             # or keep across sessions?
             q_values = {
-                'Speaker1': {'overall': 0, 'A': 0, 'B': 0}, 
-                'Speaker2': {'overall': 0, 'A': 0, 'B': 0}
+                'Speaker1': {'overall': 0.5, 'A': 0.5, 'B': 0.5}, 
+                'Speaker2': {'overall': 0.5, 'A': 0.5, 'B': 0.5}
             }
             
             for _, row in sessdf.iterrows():

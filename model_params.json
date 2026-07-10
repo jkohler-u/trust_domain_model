@@ -1,9 +1,9 @@
 {
     "drift": {
-        "drift_intercept": 0.272496528867777,
-        "drift_scaling": 5.0,
-        "omega": 1.0,
-        "alpha": 0.0022893762473686187
+        "drift_intercept": 0.28878735488634083,
+        "drift_scaling": 0.34282053762515463,
+        "omega": 0.8966205713938687,
+        "alpha": 0.6156588343358027
     },
     "noise": {
         "noise": 1

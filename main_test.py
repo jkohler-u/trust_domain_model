@@ -35,17 +35,17 @@ if __name__ == "__main__":
     # --- CONFIGURATION ---
     speakers = ['Speaker1', 'Speaker2']
     domains = ['A', 'B']
-    speaker_confidence = 1
+    speaker_confidence = 2
     # ADDED: How often the speaker is actually right (Ground Truth)
     truth_probs = {
-        'Speaker1': {'A': 0.8, 'B': 0.2}, 
-        'Speaker2': {'A': 0.3, 'B': 0.9}
+        'Speaker1': {'A': 0.6, 'B': 0.95}, 
+        'Speaker2': {'A': 0.95, 'B': 0.6}
     }
 
     # How the participant perceives the speaker's expertise (Covariate)
     exp_map = {
-        'Speaker1': {'A': 0.9, 'B': 0.1}, 
-        'Speaker2': {'A': 0.2, 'B': 0.8}
+        'Speaker1': {'A': 0.9, 'B': 0.75}, 
+        'Speaker2': {'A': 0.75, 'B': 0.9}
     }
 
     # 1. Generate the "Script"
@@ -63,12 +63,12 @@ if __name__ == "__main__":
         drift=trust_drift,
         noise=1, # amount of random "jitter" / inconsistency of participant
         bound=speaker_confidence, # distance between yes/no boundaries
-        nondecision=0.3,
+        nondecision=0.3, # av reaction time of a user
         conditions=["q_domain", "q_overall", "expertise"], # need expertise in trust_drift, do not want column to be dropped
         parameters={
             "drift_intercept": 0, # general tendency to trust or distrust.
             "drift_scaling": 1, # confidence: how much do trust values influence behaviour
-            "omega": 0.5, # weighting: omega determines tendency to trust domain-expertise over general trust
+            "omega": 0.6, # weighting: omega determines tendency to trust domain-expertise over general trust
             "alpha": 0.1 # learning rate, value the Optimizer will try to find
         },
         T_dur=20 # maximum amount of time allowed to make decision (in s)
@@ -81,36 +81,36 @@ if __name__ == "__main__":
         expertise_map=exp_map # how participant rated speaker's domain expertise at start
     )
 
-    # 2. Parameters to fit
-    # Note: include alpha in drift dependence so Loss function finds it
-    recov_params = {
-        "drift_intercept": ( -1, 1),
-        "drift_scaling": (0, 5),
-        "omega": (0, 1),
-        "alpha": (0, 1)
-    }
+    # # 2. Parameters to fit
+    # # Note: include alpha in drift dependence so Loss function finds it
+    # recov_params = {
+    #     "drift_intercept": ( -1, 1),
+    #     "drift_scaling": (0, 5),
+    #     "omega": (0, 1),
+    #     "alpha": (0, 1)
+    # }
 
-    # 3. Setup Model
-    model_recov = pyddm.gddm(
-        drift=trust_drift,
-        noise=1,
-        bound=speaker_confidence,
-        nondecision=0,
-        conditions=["q_domain", "q_overall", "expertise"],
-        parameters=recov_params,
-        T_dur=20
-    )
+    # # 3. Setup Model
+    # model_recov = pyddm.gddm(
+    #     drift=trust_drift,
+    #     noise=1,
+    #     bound=speaker_confidence,
+    #     nondecision=0,
+    #     conditions=["q_domain", "q_overall", "expertise"],
+    #     parameters=recov_params,
+    #     T_dur=20
+    # )
     
-    # Convert pandas to pyddm Sample
-    samp = pyddm.Sample.from_pandas_dataframe(sim_df, choice_column_name="choice", rt_column_name="rt")
+    # # Convert pandas to pyddm Sample
+    # samp = pyddm.Sample.from_pandas_dataframe(sim_df, choice_column_name="choice", rt_column_name="rt")
 
-    # 5. Fit using the new Integrated Loss
-    model_recov.fit(sample=samp, lossfunction=LossRLIntegrated)
+    # # 5. Fit using the new Integrated Loss
+    # model_recov.fit(sample=samp, lossfunction=LossRLIntegrated)
 
-    params =  model_recov.parameters()
-    print(params)
+    # params =  model_recov.parameters()
+    # print(params)
 
-    sim_df.to_csv("sim_df.csv", index=False)
-    gt_df.to_csv("gt_df.csv", index=False)
-    with open("model_params.json", "w") as f:
-        json.dump(params, f, indent=4)
+    sim_df.to_csv("sim_df_incompetent_within_competent_outside.csv", index=False)
+    gt_df.to_csv("gt_df_incompetent_within_competent_outside.csv", index=False)
+    # with open("model_params_trust.json", "w") as f:
+    #     json.dump(params, f, indent=4)
