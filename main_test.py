@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import pyddm
 import pyddm.plot
-
+import json
 import matplotlib.pyplot as plt
 
 from utils.dataset import generate_ground_truth
@@ -112,6 +112,5 @@ if __name__ == "__main__":
 
     sim_df.to_csv("sim_df.csv", index=False)
     gt_df.to_csv("gt_df.csv", index=False)
-    import json
-    with open(PLOT_DIR / "model_params.json", "w") as f:
+    with open("model_params.json", "w") as f:
         json.dump(params, f, indent=4)

@@ -1,0 +1,20 @@
+{
+    "drift": {
+        "drift_intercept": 0.20228194626210863,
+        "drift_scaling": 1.1609280455732758,
+        "omega": 0.6781052637883482,
+        "alpha": 1.0
+    },
+    "noise": {
+        "noise": 1
+    },
+    "bound": {
+        "B": 1
+    },
+    "IC": {
+        "x0": 0
+    },
+    "overlay": {
+        "nondectime": 0
+    }
+}

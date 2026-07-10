@@ -102,10 +102,15 @@ RT and choice over time
 tweet_domain = np.array([1]*50 + [2]*50)
 np.random.shuffle(tweet_domain)
 def plot_cumulative_accuracy_per_domain(tweet, domain, choice):
+    """
+    tweet - whether the tweet was true/false
+    domain - what domain the tweet belongs to
+    choice - the choice the user made 
+    """
     # Filter data per domain
-    acc_dom1 = (tweet[domain == 1] == choice[domain == 1]).astype(int)
-    acc_dom2 = (tweet[domain == 2] == choice[domain == 2]).astype(int)
-
+    acc_dom1 = (tweet[domain == 'A'] == choice[domain ==  'A']).astype(int)
+    acc_dom2 = (tweet[domain == 'B'] == choice[domain ==  'B']).astype(int)
+    print(acc_dom1[:10])
     # Calculate cumulative means
     cum_acc1 = np.cumsum(acc_dom1) / np.arange(1, len(acc_dom1) + 1)
     cum_acc2 = np.cumsum(acc_dom2) / np.arange(1, len(acc_dom2) + 1)
@@ -136,46 +141,54 @@ def plot_cumulative_accuracy_per_domain(tweet, domain, choice):
     plt.show()
 
 # plot_cumulative_accuracy_per_domain(tweets, tweet_domain, choices)
-
-def plot_trust_switching(q_values, choices, domain_labels=None):
-    """
-    Visualizes the internal trust estimate (Q) and the actual decisions.
-    
-    Args:
-        q_values: Array of Q-values before the decision was made for each trial.
-        choices: Array of choices (1 for Trust, -1 for Distrust).
-        domain_labels: Optional array indicating which domain the trial belonged to.
-    """
+def plot_trust_switching(q_values, choices, tweets, domain_labels=None):
     trials = np.arange(1, len(q_values) + 1)
+    q_values = np.array(q_values)
     
     plt.figure(figsize=(14, 6))
     
-    # 1. Plot the Q-value line (The internal state)
+    # 1. Plot the Q-value line
     plt.plot(trials, q_values, color='black', lw=2, alpha=0.7, label='Learned Trust (Q)', zorder=1)
     
-    # 2. Plot the decisions as markers on the line
-    # Split indices based on choice
+    # 2. Plot the decisions as markers ON the line
     trust_idx = np.where(np.array(choices) == 1)[0]
-    distrust_idx = np.where(np.array(choices) == -1)[0]
-    
-    # Trust = Green dots, Distrust = Red dots
-    plt.scatter(trust_idx + 1, np.array(q_values)[trust_idx], 
+    distrust_idx = np.where(np.array(choices) == 0)[0]
+
+    plt.scatter(trust_idx + 1, q_values[trust_idx], 
                 color='forestgreen', marker='o', s=40, label='Decision: Trust', zorder=2)
-    plt.scatter(distrust_idx + 1, np.array(q_values)[distrust_idx], 
+    plt.scatter(distrust_idx + 1, q_values[distrust_idx], 
                 color='crimson', marker='x', s=40, label='Decision: Distrust', zorder=2)
 
-    # 3. Add a reference line at 0 (The neutral point)
+    # --- FIX: Line of markers at the bottom representing the ground truth (tweets) ---
+    corr_ix = np.where(np.array(tweets) == 1)[0]
+    false_ix = np.where(np.array(tweets) == 0)[0]
+    
+    # Calculate a y-position that is slightly below the lowest Q-value
+    bottom_y = np.min(q_values) - (np.ptp(q_values) * 0.1) 
+    
+    plt.scatter(corr_ix + 1, [bottom_y] * len(corr_ix), 
+                color='forestgreen', marker='o', s=20, alpha=0.5, label='Truth: Correct', zorder=2)
+    plt.scatter(false_ix + 1, [bottom_y] * len(false_ix), 
+                color='crimson', marker='x', s=20, alpha=0.5, label='Truth: False', zorder=2)
+
+    # 3. Add a reference line at 0
     plt.axhline(0, color='gray', linestyle='--', alpha=0.5)
     
     # 4. Formatting
     plt.title("The Trust Switching Point: Internal Value vs. Final Decision", fontsize=14)
     plt.xlabel("Trial Number", fontsize=12)
     plt.ylabel("Q-Value (Trustworthiness Estimate)", fontsize=12)
-    plt.legend(loc='best', frameon=False)
+    
+    # Clean up legend to avoid duplicates
+    handles, labels = plt.gca().get_legend_handles_labels()
+    by_label = dict(zip(labels, handles))
+    plt.legend(by_label.values(), by_label.keys(), loc='best', frameon=False)
+    
     plt.grid(True, alpha=0.2)
+    plt.show()
 
 qvalue_overall = np.random.uniform(-5, 5, 100)
-plot_trust_switching(qvalue_overall, choices)
+# plot_trust_switching(qvalue_overall, choices)
 
 
 
@@ -241,8 +254,9 @@ def plot_pred_errors(q_0, q_d1, q_d2, domain, tweets, ax=None):
     # 2. Calculate Prediction Errors
     # Note: we must ensure tweets are sliced the same way as qvalues
     pred_err_q_0 = tweets - q_0
-    pred_err_q_d1 = tweets[domain == 1] - q_d1
-    pred_err_q_d2 = tweets[domain == 2] - q_d2
+    pred_err_q_d1 = tweets[domain == 'A'] - q_d1
+    print(pred_err_q_0[:10])
+    pred_err_q_d2 = tweets[domain == 'B'] - q_d2
     
     # 3. Create Subplots (1 row, 3 columns)
     fig, axs = plt.subplots(1, 3, figsize=(18, 5))
@@ -319,7 +333,7 @@ def plot_outcomes(choices, tweets):
                 color='red', marker='x', s=50, label='Chose Distrust', zorder=3)
     plt.show()
     
-plot_outcomes(choices, tweets)
+# plot_outcomes(choices, tweets)
 
 
 
