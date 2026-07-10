@@ -1,0 +1,32 @@
+define an average participant
+
+* speaker who is trustworthy (most tweets are correct)
+* speaker who is untrustworty (most tweets are incorrect - spread equally across domain)
+    => compare at overall performance
+
+* speaker who is trustworthy in their domain of expertise 
+    & unstrustworty outside their domain of expertise 
+* speaker who is unstrustworty in their domain of expertise 
+    & trustworthy outside their domain of expertise 
+    => look at domain/vs overall performance 
+
+participant can be: 
+confident/not confident in their ability
+
+* confident in their abiltiy participant + overall trustworthy speaker
+* confident in their abiltiy participant + overall unstrustworty speaker
+=> compare overall performance
+
+* confident in their abiltiy participant + domain trustworthy speaker
+* confident in their abiltiy participant + domain unstrustworty speaker
+=> compare domain specific performance
+
+confident/not confident in the speakers ability
+* confident in the speakers ability participant + overall trustworthy speaker
+* not confident in he speakers ability participant + overall trustworthy speaker
+
+* confident in the speakers ability participant + overall untrustworthy speaker
+* not confident in he speakers ability participant + overall untrustworthy speaker
+=> compare overall performance
+
+
